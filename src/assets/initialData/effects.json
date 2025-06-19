@@ -1,0 +1,16 @@
+[
+  {
+    "id": "effect1",
+    "name": "Overeating",
+    "description": "You ordered food again, and feel lethargic.",
+    "active": false,
+    "penalty": { "discipline": -1, "strength": -1 }
+  },
+  {
+    "id": "effect2",
+    "name": "Gooning",
+    "description": "You lost time and energy to unhealthy habits.",
+    "active": false,
+    "penalty": { "discipline": -2, "charisma": -1 }
+  }
+]

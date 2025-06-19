@@ -1,0 +1,22 @@
+[
+  {
+    "id": "quest1",
+    "title": "No Junk Food",
+    "description": "Avoid all forms of junk food today.",
+    "xp": 30,
+    "statGain": { "discipline": 1 },
+    "penaltyOnMiss": { "discipline": -2 },
+    "isDaily": true,
+    "completed": false
+  },
+  {
+    "id": "quest2",
+    "title": "DSA Practice",
+    "description": "Solve 2 problems from arrays or strings.",
+    "xp": 40,
+    "statGain": { "intellect": 2 },
+    "penaltyOnMiss": { "intellect": -1 },
+    "isDaily": true,
+    "completed": false
+  }
+]
