@@ -4,6 +4,19 @@ This document outlines the full list of **screens**, **components**, and **featu
 
 ---
 
+## 📁 Folder Structure Rules
+
+- ❌ No feature-based folder structure.
+- ✅ Maintain a structure like:
+  - `src/assets/initialData` → static JSON files (quests, effects, types)
+  - `src/assets/style.ts` → reusable tailwind styles
+  - `src/components/shared/` → reusable UI components like Navbar
+  - `src/pages/` → top-level route components like Dashboard, Quests, History
+  - `src/store/slices` → Redux slices for effects, stats, quests, etc.
+  - `src/hooks/` → custom React hooks
+
+---
+
 ## 📖 Core Screens (Pages)
 
 | # | Route / Page         | Description                                                              | Priority | Status |
@@ -24,49 +37,53 @@ This document outlines the full list of **screens**, **components**, and **featu
 ## 📈 System Modules & Features
 
 ### 🏋️ Stats + XP Engine
-- Show stat progress bars (STR, INT, DEX, etc.)
+- Stat types: STR, INT, DISC, DEX, CHA, LUK
 - XP system (global + per stat)
+- Scaling XP based on partial completion of quests
 - Stat cap increase on level-up
-- Redux slice + UI integration
+- Redux slice integration (see `store/slices/statsSlice.ts`)
 
 ### 🔢 Quest Tracking System
-- Daily Core Quests (workout, wake early, etc.)
-- Optional Quests (writing, music)
-- Completed/Skipped toggle
-- Auto-reset daily
+- Daily, optional, surprise quests
+- Scaling XP based on effort/time percentages
+- Combo-based XP rewards
+- Partial scoring + auto reset daily
 
 ### ⚡ Combo Detection System
-- Real-time combo logic (checklist + bonus XP)
-- Display visual combo log + XP gain popup
+- Status effect detection using `effects.json`
+- Triggers when multiple quest outcomes align
+- Applies buffs or penalties
+- Real-time UI update
 
 ### ❌ Penalty System
-- Negative XP or stat penalties
-- Missed quests tracked by type
-- Combo breakdown of bad behavior
+- Tracked by failed quests marked with `penalty: true`
+- Applies stat penalties + visual effects
+- Logged with timestamps in Redux + history
 
 ### 🌟 Leveling & Rewards
-- XP bar animation
-- Modal with level-up reward choices
-- Cap increase or theme unlock
+- XP progress and level-up UI
+- Level-up screen with stat cap choices
+- Unlock streak-based themes or abilities
 
 ### 🚫 Gooning + Junk Food Monitor
-- Custom penalties for porn/food addiction
-- Negative combo detection
+- Specific quests (e.g., "No Gooning", "Avoid Junk Food")
+- Auto-detect penalties and mark effects
+- Tracks streaks, combos, and failures
 
 ### 🎡 Surprise Quest Engine
-- RNG-based event triggering
-- Popup modal with time-limited quest
-- Accept/Decline logic with effects
+- RNG-triggered quest popups
+- Based on LUK stat or surprise system logic
+- Accept/decline logic affects XP and stats
 
 ### 🌍 Persistent Logging
-- Quest history
-- Weekly charts (XP, streaks, stat gain)
-- Log-based animation (sliding progress per day)
+- Redux state syncing with localStorage
+- Weekly charts for XP and stat gains
+- Scrollable log of completed/skipped quests
 
 ### 🎨 UI Theming
-- Light/Dark + unlockable themes
-- Level-based unlock system
-- Optional framer-motion transitions
+- Light/Dark theme toggles
+- Level-based unlockable themes
+- Uses `style.ts` to manage Tailwind presets
 
 ---
 
@@ -112,3 +129,4 @@ This document outlines the full list of **screens**, **components**, and **featu
 
 > Use this as a roadmap for your designer + frontend dev handoff.
 > Each page should be modular and responsive for future mobile app conversion (React Native / PWA).
+> Copilot Agent Mode should follow all constraints in `requirements.md` strictly.

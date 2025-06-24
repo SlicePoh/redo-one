@@ -14,6 +14,7 @@ export interface Quest {
   penaltyOnMiss?: Partial<Record<StatType, number>>;
   isDaily: boolean;
   completed: boolean;
+  progress?: number; // ==== CoPilot Code START ==== // Added for QuestState compatibility // ==== CoPilot Code END ====
 }
 
 export interface Effect {
