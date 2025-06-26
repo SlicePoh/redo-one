@@ -1,13 +1,15 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { StatType } from '../../assets/types';
+import type { StatType, StatOrMetaType } from '../../assets/types';
 import statsData from '../../assets/initialData/stats.json';
 
 // Define the initial state strictly based on the stat types
-const initialState: Record<StatType, number> = {
+const initialState: Record<StatOrMetaType, number> = {
   discipline: statsData.discipline || 0,
   strength: statsData.strength || 0,
   intellect: statsData.intellect || 0,
   charisma: statsData.charisma || 0,
+  luck: statsData.luck || 0,
+  dexterity: statsData.dexterity || 0,
   xp: statsData.xp || 0,
   level: statsData.level || 1,
 };

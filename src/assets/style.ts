@@ -1,4 +1,3 @@
-
 const styles = {
     flexCenter: "flex justify-center items-center",
     flexStart: "flex justify-start items-start",
@@ -80,5 +79,7 @@ export const layout = {
 
 
 };
-  
+
+export const heading = "text-2xl font-bold tracking-wide";
+
 export default styles;

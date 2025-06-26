@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import {Dashboard} from './pages/Dashboard';
 import {QuestLog} from './pages/QuestLog';
@@ -7,6 +6,10 @@ import {History} from './pages/History';
 import {Settings} from './pages/Settings';
 import {Navbar} from './components/shared/Navbar';
 import { PageWrapper } from './components/shared/PageWrapper';
+import { Combos } from './pages/Combos';
+import { Penalties } from './pages/Penalties';
+import { LevelUp } from './pages/LevelUp';
+import { Auth } from './pages/Auth';
 
 function App() {
   return (
@@ -37,6 +40,26 @@ function App() {
           <Route path="/settings" element={
               <PageWrapper>
                 <Settings />
+              </PageWrapper>
+          }/>
+          <Route path="/combos" element={
+              <PageWrapper>
+                <Combos />
+              </PageWrapper>
+          }/>
+          <Route path="/penalties" element={
+              <PageWrapper>
+                <Penalties />
+              </PageWrapper>
+          }/>
+          <Route path="/level-up" element={
+              <PageWrapper>
+                <LevelUp />
+              </PageWrapper>
+          }/>
+          <Route path="/auth" element={
+              <PageWrapper>
+                <Auth />
               </PageWrapper>
           }/>
         </Routes>

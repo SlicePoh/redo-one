@@ -13,7 +13,7 @@ export const QuestLog = () => {
       <div className={styles.hero + ' p-4'}>
         <h2 className={headingStyle + ' mb-4'}>Quest Log</h2>
         {quests.length === 0 && <div className="text-beige">No quests found.</div>}
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-4">
           {quests.map((q: Quest) => (
             <div key={q.id} className="bg-dark-2 rounded-lg p-4 shadow flex flex-col gap-2">
               <div className="flex items-center justify-between">

@@ -1,0 +1,31 @@
+{
+  "name": "Shanit",
+  "age": 24,
+  "gender": "Male",
+  "height": 167,
+  "weight": 82,
+  "goals": [
+    "Lose belly fat and thigh weight",
+    "Switch job and double salary",
+    "Improve guitar skills",
+    "Fix discipline and porn habit"
+  ],
+  "addictions": [
+    "Porn/Gooning",
+    "Junk food/Zomato ordering"
+  ],
+  "mentalHealth": 9,
+  "discipline": 2,
+  "relationships": {
+    "status": "Married",
+    "partnerLocation": "Bardhaman",
+    "notes": "Girlfriend is a designer at a startup"
+  },
+  "finance": {
+    "netWorthINR": 215000,
+    "monthlyIncome": 45000
+  },
+  "languages": ["English", "Hindi", "Bengali"],
+  "location": "Bangalore",
+  "skills": ["Frontend Dev", "Angular", "React", "Content Writing", "DSA"]
+}

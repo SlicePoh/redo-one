@@ -3,6 +3,8 @@
   "strength": 3,
   "intellect": 5,
   "charisma": 2,
+  "luck": 3,
+  "dexterity": 3,
   "xp": 120,
   "level": 1
 }
