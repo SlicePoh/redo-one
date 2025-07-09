@@ -1,8 +1,8 @@
 // ==== CoPilot Code START ====
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '../store';
-import styles from '../assets/style';
+import { heading } from '../assets/style';
 
 const rewards = [
   { label: 'Increase Stat Cap', value: 'cap' },
@@ -14,7 +14,7 @@ export const LevelUp = () => {
   const stats = useSelector((state: RootState) => state.stats);
   return (
     <div className="max-w-xl mx-auto">
-      <h1 className={styles.heading + ' mb-6'}>Level Up!</h1>
+      <h1 className={heading + ' mb-6'}>Level Up!</h1>
       <div className="mb-6">
         <div className="w-full bg-gray-800 rounded-full h-5 mb-2">
           <div className="bg-green-400 h-5 rounded-full transition-all duration-500" style={{ width: '100%' }} />

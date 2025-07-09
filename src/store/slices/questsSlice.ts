@@ -63,9 +63,8 @@ export function pickNewDailyQuests(quests: QuestWithStats[]): string[] {
 export const rotateDailyQuests = createAsyncThunk(
   'quests/rotateDailyQuests',
   async ({ updateDate }: { updateDate: boolean }, { getState, dispatch }) => {
-    // @ts-ignore
     const state = getState();
-    const quests = state.quests as QuestWithStats[];
+    const quests = state?.quests as QuestWithStats[];
     const newDailyIds = pickNewDailyQuests(quests);
     dispatch(setDailyQuests(newDailyIds));
     if (updateDate) {

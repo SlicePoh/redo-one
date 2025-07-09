@@ -1,12 +1,12 @@
 // ==== CoPilot Code START ====
 import { useState } from 'react';
-import styles from '../assets/style';
+import { heading } from '../assets/style';
 
 export const Auth = () => {
   const [mode, setMode] = useState<'login' | 'register'>('login');
   return (
     <div className="max-w-md mx-auto">
-      <h1 className={styles.heading + ' mb-6'}>{mode === 'login' ? 'Login' : 'Register'}</h1>
+      <h1 className={heading + ' mb-6'}>{mode === 'login' ? 'Login' : 'Register'}</h1>
       <form className="space-y-4">
         <input type="email" placeholder="Email" className="w-full px-4 py-2 rounded bg-gray-800 text-white" />
         <input type="password" placeholder="Password" className="w-full px-4 py-2 rounded bg-gray-800 text-white" />

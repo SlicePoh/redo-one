@@ -1,6 +1,6 @@
 // ==== CoPilot Code START ====
 import React, { useState } from 'react';
-import styles from '../../assets/style';
+import styles, { heading } from '../../assets/style';
 import { statLabels } from '../../assets/statConfig';
 import type { Quest, DifficultyType } from '../../assets/types';
 
@@ -32,9 +32,9 @@ export const AddQuestModal: React.FC<AddQuestModalProps> = ({ open, onClose, all
 
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center bg-black bg-opacity-60 w-96">
-      <div className={styles.modal + ' max-w-lg w-full p-6'}>
+      <div className={styles.modal + ' max-w-lg w-full p-6 font-poppins'}>
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Add Quest</h2>
+          <h2 className={heading}>Add Quest</h2>
           <button onClick={onClose} className="text-2xl">×</button>
         </div>
         <div className="flex gap-2 mb-3 flex-wrap">

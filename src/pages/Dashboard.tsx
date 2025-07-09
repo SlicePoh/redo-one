@@ -6,7 +6,7 @@ import type { RootState } from '../store';
 import styles from '../assets/style';
 import { PageWrapper } from '../components/shared/PageWrapper';
 import type { Effect, StatType, Quest } from '../assets/types';
-import { toggleQuestStatus, setQuestProgress, rotateDailyQuests } from '../store/slices/questsSlice';
+import { toggleQuestStatus, rotateDailyQuests } from '../store/slices/questsSlice';
 import { useDailyQuestsByStat } from '../hooks/useDailyQuestsByStat';
 import { useDailyQuestRotation } from '../hooks/useDailyQuestRotation';
 import { statLabels, statColors, statMap } from '../assets/statConfig';
@@ -15,6 +15,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import { AddQuestModal } from '../components/shared/AddQuestModal';
+import { QuestItem } from '../components/shared/QuestItem';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -164,63 +165,46 @@ export const Dashboard = () => {
 
   return (
     <PageWrapper>
-      <div ref={dashRef} className={styles.hero + ' grid gap-4 grid-cols-1 md:grid-cols-3'}>
+      <div ref={dashRef} className={styles.hero + ' grid gap-4 grid-cols-1 md:grid-cols-3 font-poppins'}>
         {/* Left: Daily Quests */}
-        <div className="col-span-2 bg-dark-2 rounded-lg p-4 shadow">
+        <div className="col-span-2 bg-dark-2 rounded-lg p-4 shadow font-poppins">
           <div className="flex justify-between items-center mb-4">
-            <h2 className={headingStyle}>Daily Quests</h2>
-            <button className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800 text-xs font-semibold"
+            <h2 className={headingStyle + ' font-montserrat'}>Daily Quests</h2>
+            <button className="px-3 py-1 bg-blue-700 text-white rounded hover:bg-blue-800 text-xs font-semibold font-poppins"
               onClick={handleRefreshQuests} title="Refresh daily quests manually" >
               Refresh
             </button>
           </div>
           {displayedQuests.length ? (
-            displayedQuests.map((q) => {
-              const supportsPartial = !!q.partialScoring || !!q.scalingXp;
-              const questStats = getQuestStats(q.stats || []);
-              return (
-                <div key={q.id} className="flex items-center gap-4 mb-2">
-                  <input type="checkbox" className="w-5 h-5" checked={q.completed}
-                    onChange={() => dispatch(toggleQuestStatus(q.id))} disabled={supportsPartial}
-                  />
-                  <span className="flex-1 h-2 bg-gray-300 rounded overflow-hidden">
-                    <div className="bg-black h-full" style={{ width: `${q.progress ?? (q.completed ? 100 : 0)}%` }}></div>
-                  </span>
-                  <span className="text-beige text-sm ml-2">{q.title}</span>
-                  {/* Stat tags */}
-                  <span className="flex gap-1 ml-2">
-                    {questStats.map((stat) => (
-                      <span key={stat} className={`px-2 py-0.5 rounded text-xs text-white ${statColors[stat]}`}>{statLabels[stat]}</span>
-                    ))}
-                  </span>
-                  {supportsPartial && (
-                    <input type="number" min={0} max={100} step={5} value={q.progress ?? 0}
-                      onChange={e => dispatch(setQuestProgress({ id: q.id, progress: Math.max(0, Math.min(100, Number(e.target.value))) }))}
-                      className="ml-2 w-16 px-1 py-0.5 rounded bg-dark-3 text-beige border border-dark-4 text-xs"
-                      title="Enter completion %"
-                    />
-                  )}
-                </div>
-              );
-            })
+            displayedQuests.map((q) => (
+              <QuestItem
+                key={q.id}
+                quest={q}
+                mode="select"
+                onToggle={(id) => dispatch(toggleQuestStatus(id))}
+                showStats={true}
+                showActions={true}
+                className="mb-2 font-poppins"
+              />
+            ))
           ) : (
-            <div className="text-beige/60 text-xs mb-2">No daily quests available.</div>
+            <div className="text-beige/60 text-xs mb-2 font-poppins">No daily quests available.</div>
           )}
           {/* Surprise Quests Section */}
           <div className="mt-8">
-            <h2 className={headingStyle + ' mb-4'}>Surprise Quests</h2>
+            <h2 className={headingStyle + ' mb-4 font-montserrat'}>Surprise Quests</h2>
             {!surpriseQuest && !acceptedSurpriseId && (
               <button
-                className="px-6 py-3 bg-blue-600 rounded-lg text-white font-bold hover:bg-blue-700 mb-4"
+                className="px-6 py-3 bg-blue-600 rounded-lg text-white font-bold hover:bg-blue-700 mb-4 font-poppins"
                 onClick={triggerSurpriseQuest}
               >
                 Trigger Surprise Quest
               </button>
             )}
             {surpriseQuest && (
-              <div className="bg-gray-800 rounded-lg p-6">
-                <h2 className="text-xl font-semibold mb-2">{surpriseQuest.title}</h2>
-                <p className="mb-4">{surpriseQuest.description}</p>
+              <div className="bg-gray-800 rounded-lg p-6 font-poppins">
+                <h2 className="text-xl font-semibold mb-2 font-montserrat">{surpriseQuest.title}</h2>
+                <p className="mb-4 font-poppins">{surpriseQuest.description}</p>
                 {/* Render surprise quest controls like daily quests */}
                 <div className="flex items-center gap-4 mb-4">
                   {(() => {
@@ -237,13 +221,13 @@ export const Dashboard = () => {
                         </span>
                         <span className="flex gap-1 ml-2">
                           {questStats.map((stat) => (
-                            <span key={stat} className={`px-2 py-0.5 rounded text-xs text-white ${statColors[stat]}`}>{statLabels[stat]}</span>
+                            <span key={stat} className={`px-2 py-0.5 rounded text-xs text-white font-montserrat ${statColors[stat]}`}>{statLabels[stat]}</span>
                           ))}
                         </span>
                         {supportsPartial && (
                           <input type="number" min={0} max={100} step={5} value={surpriseQuest.progress ?? 0}
                             onChange={e => setSurpriseQuest({ ...surpriseQuest, progress: Math.max(0, Math.min(100, Number(e.target.value))), completed: Number(e.target.value) >= 100 })}
-                            className="ml-2 w-16 px-1 py-0.5 rounded bg-dark-3 text-beige border border-dark-4 text-xs"
+                            className="ml-2 w-16 px-1 py-0.5 rounded bg-dark-3 text-beige border border-dark-4 text-xs font-poppins"
                             title="Enter completion %"
                           />
                         )}
@@ -252,29 +236,29 @@ export const Dashboard = () => {
                   })()}
                 </div>
                 <button
-                  className="px-4 py-2 bg-green-500 rounded-lg text-white font-bold hover:bg-green-600 mr-2"
+                  className="px-4 py-2 bg-green-500 rounded-lg text-white font-bold hover:bg-green-600 mr-2 font-poppins"
                   onClick={handleAcceptSurprise}
                   disabled={!!acceptedSurpriseId}
                 >Accept</button>
                 <button
-                  className="px-4 py-2 bg-red-500 rounded-lg text-white font-bold hover:bg-red-600"
+                  className="px-4 py-2 bg-red-500 rounded-lg text-white font-bold hover:bg-red-600 font-poppins"
                   onClick={handleDeclineSurprise}
                 >Decline</button>
               </div>
             )}
             {acceptedSurpriseId && !surpriseQuest && (
-              <div className="text-green-400 font-semibold mb-2">Surprise quest accepted for today!</div>
+              <div className="text-green-400 font-semibold mb-2 font-poppins">Surprise quest accepted for today!</div>
             )}
             {!surpriseQuest && !acceptedSurpriseId && (
-              <div className="text-beige/60 text-xs mb-2">No surprise quests yet.</div>
+              <div className="text-beige/60 text-xs mb-2 font-poppins">No surprise quests yet.</div>
             )}
           </div>
           {/* Extra Quests Section */}
           {extraDailyQuests.length > 0 && (
             <div className="mt-8">
-              <h2 className={headingStyle + ' mb-2'}>Added Quests</h2>
+              <h2 className={headingStyle + ' mb-2 font-montserrat'}>Added Quests</h2>
               {extraDailyQuests.map(q => (
-                <div key={q.id} className="flex items-center gap-4 mb-2 bg-dark-3 rounded p-2">
+                <div key={q.id} className="flex items-center gap-4 mb-2 bg-dark-3 rounded p-2 font-poppins">
                   <input
                     type="checkbox"
                     className="w-5 h-5"
@@ -284,22 +268,22 @@ export const Dashboard = () => {
                   <span className="flex-1 h-2 bg-gray-300 rounded overflow-hidden">
                     <div className="bg-black h-full" style={{ width: `${q.progress ?? (q.completed ? 100 : 0)}%` }}></div>
                   </span>
-                  <span className="text-beige text-sm ml-2">{q.title}</span>
-                  <button className="ml-2 text-xs bg-red-600 text-white px-2 py-1 rounded" onClick={() => handleRemoveExtraQuest(q.id)}>Remove</button>
+                  <span className="text-beige text-sm ml-2 font-montserrat">{q.title}</span>
+                  <button className="ml-2 text-xs bg-red-600 text-white px-2 py-1 rounded font-poppins" onClick={() => handleRemoveExtraQuest(q.id)}>Remove</button>
                 </div>
               ))}
             </div>
           )}
         </div>
         {/* Right: Add Quest + Negative Effects */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 font-poppins">
           <div className="bg-dark-2 rounded-lg p-4 shadow flex flex-col items-center justify-center h-1/2">
-            <h2 className={headingStyle + ' mb-2'}>Add Quests</h2>
-            <button className="text-5xl text-gray-700 hover:scale-110 transition-transform" onClick={() => setShowAddQuestModal(true)}>+</button>
+            <h2 className={headingStyle + ' mb-2 font-montserrat'}>Add Quests</h2>
+            <button className="text-5xl text-gray-700 hover:scale-110 transition-transform font-poppins" onClick={() => setShowAddQuestModal(true)}>+</button>
           </div>
           <div className="bg-dark-2 rounded-lg p-4 shadow h-1/2">
-            <h2 className={headingStyle + ' mb-2'}>Negative Status Effects</h2>
-            <ul className="text-sm text-red-600 list-disc ml-5">
+            <h2 className={headingStyle + ' mb-2 font-montserrat'}>Negative Status Effects</h2>
+            <ul className="text-sm text-red-600 list-disc ml-5 font-poppins">
               {effects.length === 0 && <li>No negative effects</li>}
               {effects.map((e: Effect) => {
                 const penaltySum = Object.values(e.penalty ?? {}).reduce<number>((a, b) => a + (typeof b === 'number' ? b : 0), 0);

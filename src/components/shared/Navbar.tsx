@@ -3,7 +3,7 @@ import { useRef, type ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import { gsap } from "gsap";
 import { FiHome, FiClipboard, FiUser, FiBarChart2, FiSettings, 
-  FiZap, FiAlertTriangle, FiGift, FiSmile, FiLogIn } from "react-icons/fi";
+  FiZap, FiAlertTriangle, FiGift, FiLogIn } from "react-icons/fi";
 import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(useGSAP);

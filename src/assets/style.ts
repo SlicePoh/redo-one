@@ -19,10 +19,10 @@ const styles = {
     icon7: "text-white text-base md:text-xl mr-2 ",
     
     
-    search_text: "bg-dark-3 placeholder-beige font-kulim rounded-lg h-10 outline-none w-full p-1",
-    search_text1: "bg-dark-3 placeholder-beige font-kulim rounded-lg h-8 text-sm outline-none w-full px-3 flex sm:hidden mr-4 mt-2",
-    doubts_text: "bg-dark-3 placeholder-beige font-kulim rounded-lg text-sm md:text-lg h-10 md:h-12 p-4 outline-none w-full ",
-    comments_text: "bg-transparent placeholder-beige font-kulim text-sm md:text-lg h-10 md:h-12 p-2 md:p-4 outline-none w-full ",
+    search_text: "bg-dark-3 placeholder-beige font-poppins rounded-lg h-10 outline-none w-full p-1",
+    search_text1: "bg-dark-3 placeholder-beige font-poppins rounded-lg h-8 text-sm outline-none w-full px-3 flex sm:hidden mr-4 mt-2",
+    doubts_text: "bg-dark-3 placeholder-beige font-montserrat rounded-lg text-sm md:text-lg h-10 md:h-12 p-4 outline-none w-full ",
+    comments_text: "bg-transparent placeholder-beige font-montserrat text-sm md:text-lg h-10 md:h-12 p-2 md:p-4 outline-none w-full ",
 
     tags: " w-full my-1 text-center text-3xs 2xl:text-2xs p-1 md:p-2 bg-dark-3 rounded-lg",
     likes_num: "text-sm md:text-lg text-beige mx-1 md:mx-2",
@@ -80,6 +80,7 @@ export const layout = {
 
 };
 
-export const heading = "text-2xl font-bold tracking-wide";
+export const heading = "font-poppins font-bold text-2xl md:text-3xl text-beige tracking-wide";
+export const subheading = "font-montserrat font-semibold text-lg md:text-xl text-beige tracking-wide";
 
 export default styles;

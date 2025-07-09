@@ -32,3 +32,9 @@ export const statMap: Record<string, StatOrMetaType> = {
   XP: 'xp',
   LEVEL: 'level',
 };
+
+export const difficultyColors: Record<string, string> = {
+  easy: 'bg-green-600',
+  medium: 'bg-yellow-600',
+  hard: 'bg-red-700',
+};
