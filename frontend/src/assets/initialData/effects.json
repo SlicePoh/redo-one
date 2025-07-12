@@ -1,0 +1,207 @@
+[
+  {
+    "id": "effect1",
+    "name": "Overeating",
+    "description": "You ordered food again, and feel lethargic.",
+    "active": false,
+    "penalty": { "discipline": -1, "strength": -1 },
+    "trigger": { "questId": "quest_031", "failuresInLastDays": 2 },
+    "removal": { "questId": "quest_006", "successStreak": 3 }
+  },
+  {
+    "id": "effect2",
+    "name": "Gooning",
+    "description": "You lost time and energy to unhealthy habits.",
+    "active": false,
+    "penalty": { "discipline": -2, "charisma": -1 },
+    "trigger": { "questId": "quest_005", "failuresInLastDays": 2 },
+    "removal": { "questId": "quest_005", "successStreak": 7 }
+  },
+  {
+    "id": "effect3",
+    "name": "Sleep Debt",
+    "description": "You're running on fumes due to poor sleep.",
+    "active": false,
+    "penalty": { "intelligence": -1, "discipline": -1 },
+    "trigger": { "questId": "quest_025", "failuresInLastDays": 3 },
+    "removal": { "questId": "quest_025", "successStreak": 3 }
+  },
+  {
+    "id": "effect4",
+    "name": "Junk Craving",
+    "description": "Your body craves sugar and fried stuff.",
+    "active": false,
+    "penalty": { "strength": -1 },
+    "trigger": { "questId": "quest_031", "failuresInLastDays": 3 },
+    "removal": { "questId": "quest_006", "successCount": 4, "withinDays": 7 }
+  },
+  {
+    "id": "effect5",
+    "name": "Flow State",
+    "description": "You feel mentally sharp and focused.",
+    "active": false,
+    "bonus": { "intelligence": 2, "discipline": 1 },
+    "trigger": [{ "questId": "quest_036", "successStreak": 3 }],
+    "removal": { "questId": "quest_005", "failure": true }
+  },
+  {
+    "id": "effect6",
+    "name": "Sedentary Fatigue",
+    "description": "You've been sitting around too much.",
+    "active": false,
+    "penalty": { "strength": -1, "charisma": -1 },
+    "trigger": {
+      "quests": ["quest_001", "quest_008", "quest_026"],
+      "noneCompletedInDays": 3
+    },
+    "removal": { "quests": ["quest_001", "quest_026"], "anySuccess": true }
+  },
+  {
+    "id": "effect7",
+    "name": "Morning Momentum",
+    "description": "You dominated the morning!",
+    "active": false,
+    "bonus": { "discipline": 2 },
+    "trigger": [
+      { "questId": "quest_033", "success": true },
+      { "questId": "quest_010", "success": true }
+    ],
+    "removal": { "quests": ["quest_033", "quest_010"], "skippedDays": 2 }
+  },
+  {
+    "id": "effect8",
+    "name": "Burnout Cloud",
+    "description": "You're running on burnout autopilot.",
+    "active": false,
+    "penalty": { "intelligence": -1, "discipline": -2 },
+    "trigger": {
+      "quests": ["quest_001", "quest_004", "quest_036"],
+      "streakLength": 5,
+      "noFunTasks": true
+    },
+    "removal": { "quests": ["quest_027", "quest_029"], "anySuccess": true }
+  },
+  {
+    "id": "effect9",
+    "name": "Guitar Zen",
+    "description": "Music soothed your mind.",
+    "active": false,
+    "bonus": { "charisma": 2 },
+    "trigger": { "questId": "quest_027", "successOnWeekend": true },
+    "removal": { "durationHours": 48 }
+  },
+  {
+    "id": "effect10",
+    "name": "Workout High",
+    "description": "Endorphins rush from a good sweat.",
+    "active": false,
+    "bonus": { "strength": 2 },
+    "trigger": { "questId": "quest_001", "success": true },
+    "removal": { "questId": "quest_001", "skipped": true }
+  },
+  {
+    "id": "effect11",
+    "name": "Mental Clarity",
+    "description": "Meditation sharpened your mental edge.",
+    "active": false,
+    "bonus": { "intelligence": 2 },
+    "trigger": { "questId": "quest_016", "successStreak": 5 },
+    "removal": { "questId": "quest_016", "failure": true }
+  },
+  {
+    "id": "effect12",
+    "name": "Tech Burnout",
+    "description": "Too much screen time has left you frazzled.",
+    "active": false,
+    "penalty": { "intelligence": -1, "discipline": -1 },
+    "trigger": { "questId": "quest_048", "failuresInLastDays": 3 },
+    "removal": { "questId": "quest_048", "successStreak": 2 }
+  },
+  {
+    "id": "effect13",
+    "name": "Stoic Calm",
+    "description": "You’ve embraced discomfort and self-mastery.",
+    "active": false,
+    "bonus": { "discipline": 3 },
+    "trigger": [
+      { "questId": "quest_002", "successStreak": 5 },
+      { "questId": "quest_015", "successStreak": 2 }
+    ],
+    "removal": { "questId": "quest_002", "failure": true }
+  },
+  {
+    "id": "effect14",
+    "name": "Mindless Consumption",
+    "description": "Doomscrolling is killing your momentum.",
+    "active": false,
+    "penalty": { "intelligence": -1, "discipline": -1 },
+    "trigger": { "questId": "quest_028", "failuresInLastDays": 3 },
+    "removal": { "questId": "quest_034", "successStreak": 2 }
+  },
+  {
+    "id": "effect15",
+    "name": "Charisma Surge",
+    "description": "You're radiating confidence and charm.",
+    "active": false,
+    "bonus": { "charisma": 2 },
+    "trigger": [
+      { "questId": "quest_013", "success": true },
+      { "questId": "quest_023", "success": true }
+    ],
+    "removal": { "durationHours": 48 }
+  },
+  {
+    "id": "effect16",
+    "name": "Chaos Mode",
+    "description": "No structure, no plan. You're winging it daily.",
+    "active": false,
+    "penalty": { "discipline": -2 },
+    "trigger": {
+      "quests": ["quest_010", "quest_047"],
+      "noneCompletedInDays": 4
+    },
+    "removal": { "quests": ["quest_010", "quest_047"], "anySuccess": true }
+  },
+  {
+    "id": "effect17",
+    "name": "Social Recharge",
+    "description": "Meaningful conversations left you energized.",
+    "active": false,
+    "bonus": { "charisma": 1, "luck": 1 },
+    "trigger": {
+      "quests": ["quest_022", "quest_019", "quest_049"],
+      "successInLastDays": 2
+    },
+    "removal": { "durationHours": 72 }
+  },
+  {
+    "id": "effect18",
+    "name": "Dry Skin",
+    "description": "You've been skipping grooming and skincare.",
+    "active": false,
+    "penalty": { "charisma": -1 },
+    "trigger": { "questId": "quest_050", "failuresInLastDays": 3 },
+    "removal": { "questId": "quest_050", "successStreak": 2 }
+  },
+  {
+    "id": "effect19",
+    "name": "Budget Mastery",
+    "description": "Your wallet is healthy and tracked.",
+    "active": false,
+    "bonus": { "discipline": 1, "luck": 1 },
+    "trigger": [
+      { "questId": "quest_020", "successStreak": 5 },
+      { "questId": "quest_042", "successStreak": 3 }
+    ],
+    "removal": { "questId": "quest_020", "failure": true }
+  },
+  {
+    "id": "effect20",
+    "name": "Creative Flow",
+    "description": "Your content creation zone is fully activated.",
+    "active": false,
+    "bonus": { "intelligence": 1, "charisma": 1 },
+    "trigger": { "questId": "quest_023", "successStreak": 3 },
+    "removal": { "questId": "quest_023", "skippedDays": 2 }
+  }
+]
