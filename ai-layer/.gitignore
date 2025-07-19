@@ -1,7 +1,31 @@
-# .gitignore for ai-layer
+# Python
 __pycache__/
-.env
 *.pyc
 *.pyo
 *.pyd
+
+# Environment files
+.env
 .env.*
+*.env
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Logs
+*.log
+
+# Build
+build/
+dist/
+
+venv
