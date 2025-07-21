@@ -11,18 +11,16 @@
     "Fix discipline and porn habit"
   ],
   "addictions": [
-    "Porn/Gooning",
+    "Lazy",
     "Junk food/Zomato ordering"
   ],
-  "mentalHealth": 9,
-  "discipline": 2,
   "relationships": {
-    "status": "Married",
+    "status": "In a relationship",
     "partnerLocation": "Bardhaman",
     "notes": "Girlfriend is a designer at a startup"
   },
   "finance": {
-    "netWorthINR": 215000,
+    "netWorthINR": 295000,
     "monthlyIncome": 45000
   },
   "languages": ["English", "Hindi", "Bengali"],
