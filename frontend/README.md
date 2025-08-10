@@ -50,9 +50,6 @@ This document outlines the full list of **screens**, **components**, and **featu
 - Modal with level-up reward choices
 - Cap increase or theme unlock
 
-### 🚫 Gooning + Junk Food Monitor
-- Custom penalties for porn/food addiction
-- Negative combo detection
 
 ### 🎿 Surprise Quest Engine
 - RNG-based event triggering

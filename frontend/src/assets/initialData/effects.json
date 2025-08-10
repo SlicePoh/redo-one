@@ -9,15 +9,6 @@
     "removal": { "questId": "quest_006", "successStreak": 3 }
   },
   {
-    "id": "effect2",
-    "name": "Gooning",
-    "description": "You lost time and energy to unhealthy habits.",
-    "active": false,
-    "penalty": { "discipline": -2, "charisma": -1 },
-    "trigger": { "questId": "quest_005", "failuresInLastDays": 2 },
-    "removal": { "questId": "quest_005", "successStreak": 7 }
-  },
-  {
     "id": "effect3",
     "name": "Sleep Debt",
     "description": "You're running on fumes due to poor sleep.",

@@ -84,21 +84,6 @@
     }
   },
   {
-    "id": "quest5",
-    "title": "No Gooning",
-    "description": "Avoid watching porn or engaging in gooning behavior for the day.",
-    "stats": ["DISC", "LUK"],
-    "xpGain": 5,
-    "xpLoss": 0,
-    "penalty": true,
-    "requiredPlayerLevel": 1,
-    "requiredStatLevel": {
-      "DISC": 1
-    },
-    "difficulty": "medium",
-    "estimatedTime": 0
-  },
-  {
     "id": "quest6",
     "title": "Healthy Eating",
     "description": "Eat three clean meals and avoid junk food all day.",

@@ -1,49 +1,4 @@
-# Python requirements for the AI microservice
 flask
 flask-cors
 requests
 python-dotenv
-# === AI Layer Model Fine-tuning Stage ===
-# Current stage: Preparing for custom model fine-tuning (as of 2025-07-13)
-#
-# === What Has Already Been Done ===
-# - Set up a Flask-based API in ai-layer/app.py to process user input and return AI-generated JSON.
-# - Integrated Hugging Face Transformers pipeline with Mistral-7B-Instruct-v0.2 for text generation.
-# - Simplified the prompt to focus on extracting quests, stats, and biodata as JSON.
-# - Reduced max_new_tokens to 256 for faster inference.
-# - Disabled follow-up question logic to always return the model's output for easier debugging.
-# - Documented these steps and current state in this requirements.txt file.
-#
-# === Steps to Fine-tune and Use a Custom Model for Quest/Stats/Biodata Extraction ===
-#
-# 1. Prepare Training Data:
-#    - Collect example user inputs and the desired JSON outputs (quests, stats, biodata).
-#    - Save as a JSONL file, e.g.:
-#      {"input": "I completed the dragon quest and gained 5 strength.", "output": {"quests": ["dragon quest"], "stats": {"strength": 5}, "biodata": {}}}
-#    - Place this file in ai-layer/training_data.jsonl
-#
-# 2. Choose a Small Model:
-#    - Recommended: distilgpt2, TinyLlama, or a quantized Mistral model for fast inference.
-#
-# 3. Fine-tune the Model (on Windows):
-#    - Install Hugging Face Transformers and Datasets:
-#      pip install transformers datasets accelerate
-#    - Use the Hugging Face Trainer script or AutoTrain CLI:
-#      Example (using Trainer):
-#        from transformers import AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments, TextDataset
-#        # Load model and tokenizer
-#        # Prepare dataset from training_data.jsonl
-#        # Set up Trainer and TrainingArguments
-#        # Train and save model to ai-layer/model/
-#    - Or use Hugging Face AutoTrain (web): https://huggingface.co/autotrain
-#
-# 4. Update ai-layer to Load the Fine-tuned Model:
-#    - Change the model path in app.py to your fine-tuned model directory.
-#
-# 5. Test the Endpoint:
-#    - Use Bruno or curl to POST to /process-input and verify the output.
-#
-# 6. (Optional) Quantize the Model for Faster Inference:
-#    - Use bitsandbytes or optimum for quantization.
-#
-# === End of Instructions ===
