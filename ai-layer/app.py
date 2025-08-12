@@ -1,6 +1,7 @@
 import json
 import requests
 from flask import Flask, request, jsonify
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 app = Flask(__name__)
 
@@ -38,6 +39,78 @@ def call_ollama(prompt, num_predict=500):
     done_reason = outer.get("done_reason", "")
     return inner_json, done_reason
 
+@app.route("/generate-quests", methods=["POST"])
+def generate_quests():
+    data = request.get_json()
+    user_data = data.get("user_data", {})
+    goals = user_data.get("goals", [])
+    target_quests = data.get("quests_count", 20)
+
+    titles_set = set()
+    all_quests = []
+
+    def generate_for_goal(goal, already_titles):
+        """Generate quests for a single goal."""
+        prompt = f"""
+        You are an RPG quest designer for the gamified life app 'Redo'.
+
+        User stats:
+        {json.dumps(user_data.get("stats", {}), indent=2)}
+
+        Goal: {goal.get("goal", "")}
+
+        Related question answers:
+        {json.dumps(goal.get("questions", {}), indent=2)}
+
+        Rules:
+        - Stats: Vitality, Intelligence, Fortitude, Charisma, Creativity, Luck.
+        - Difficulty → XP: Easy=20, Medium=50, Hard=100, Legendary=200.
+        - Each quest: title, description (max 20 words), 1–3 stats, difficulty, xpGain.
+        - Avoid duplicate titles (avoid: {list(already_titles)}).
+        - Keep tone practical but RPG-themed.
+
+        Output ONLY in JSON:
+        {{
+        "quests": [
+            {{
+            "title": "string",
+            "description": "string",
+            "stats": ["Stat1", "Stat2"],
+            "difficulty": "Easy" | "Medium" | "Hard" | "Legendary",
+            "xpGain": integer
+            }}
+        ]
+        }}"""
+        inner_json, _ = call_ollama(prompt, num_predict=800)
+        try:
+            parsed = json.loads(inner_json)
+            return parsed.get("quests", [])
+        except json.JSONDecodeError:
+            return []
+
+    max_rounds = 5
+    for _ in range(max_rounds):
+        if len(all_quests) >= target_quests:
+            break
+
+        with ThreadPoolExecutor(max_workers=len(goals)) as executor:
+            futures = [
+                executor.submit(generate_for_goal, goal, titles_set)
+                for goal in goals
+            ]
+            for future in as_completed(futures):
+                quests = future.result()
+                for q in quests:
+                    if isinstance(q, dict) and "title" in q and q["title"] not in titles_set:
+                        titles_set.add(q["title"])
+                        all_quests.append(q)
+                        if len(all_quests) >= target_quests:
+                            break
+    # Trim to target count
+    all_quests = all_quests[:target_quests]
+    return jsonify({"quests": all_quests})
+
+
 def merge_json(original, update):
     """Merge two JSON objects without overwriting existing complete fields."""
     for key, value in update.items():
@@ -46,76 +119,6 @@ def merge_json(original, update):
         elif isinstance(value, dict) and isinstance(original[key], dict):
             merge_json(original[key], value)
     return original
-
-@app.route("/generate-quests", methods=["POST"])
-def generate_quests():
-    data = request.get_json()
-    user_data = data.get("user_data", {})
-
-    DIFFICULTY_TARGETS = {
-        "Easy": 8,
-        "Medium": 15,
-        "Hard": 15,
-        "Legendary": 12
-    }
-
-    all_quests = []
-    titles_set = set()
-    difficulty_counts = {k: 0 for k in DIFFICULTY_TARGETS}
-
-    def generate_batch(batch_size, already_titles, needed_difficulties):
-        prompt = f"""
-Generate {batch_size} unique RPG-style quests for the gamified life app 'Redo'.
-
-User stats:
-{json.dumps(user_data.get("stats", {}), indent=2)}
-
-Rules:
-- Stats: Vitality, Intelligence, Fortitude, Charisma, Creativity, Luck.
-- Difficulty → XP: Easy=20, Medium=50, Hard=100, Legendary=200.
-- Distribute quests as: {needed_difficulties}.
-- Each quest has: title, description, stats (1–3), difficulty, xpGain.
-- No duplicate titles (avoid: {list(already_titles)}).
-- Keep descriptions under 20 words.
-- Output JSON ONLY in this format:
-{{
-  "quests": [
-    {{
-      "title": "string",
-      "description": "string",
-      "stats": ["Stat1", "Stat2"],
-      "difficulty": "Easy" | "Medium" | "Hard" | "Legendary",
-      "xpGain": integer
-    }}
-  ]
-}}
-"""
-        inner_json, _ = call_ollama(prompt, num_predict=800)
-        try:
-            parsed = json.loads(inner_json)
-            return parsed.get("quests", [])
-        except json.JSONDecodeError:
-            return []
-
-    while sum(difficulty_counts.values()) < 50:
-        remaining_by_diff = {
-            diff: DIFFICULTY_TARGETS[diff] - difficulty_counts[diff]
-            for diff in DIFFICULTY_TARGETS
-            if DIFFICULTY_TARGETS[diff] - difficulty_counts[diff] > 0
-        }
-
-        batch_size = min(25, sum(remaining_by_diff.values()))
-        new_quests = generate_batch(batch_size, titles_set, remaining_by_diff)
-
-        for q in new_quests:
-            diff = q.get("difficulty")
-            if diff in DIFFICULTY_TARGETS and difficulty_counts[diff] < DIFFICULTY_TARGETS[diff]:
-                if q["title"] not in titles_set:
-                    titles_set.add(q["title"])
-                    all_quests.append(q)
-                    difficulty_counts[diff] += 1
-
-    return jsonify({"quests": all_quests})
 
 @app.route("/mentor-action", methods=["POST"])
 def mentor_action():
@@ -181,94 +184,72 @@ Do not repeat fields that are already complete.
 
     return jsonify({"mentor_action": parsed})
 
+if __name__ == "__main__":
+    app.run(debug=True)
 
-# @app.route("/generate-quest", methods=["POST"])
-# def generate_quest():
+
+# @app.route("/generate-quests", methods=["POST"])
+# def generate_quests():
 #     data = request.get_json()
 #     user_data = data.get("user_data", {})
-#     question = data.get("question", "")
 
-#     prompt = f"""
-# You are an RPG quest designer for the gamified life app 'Redo'.
-# User data: {user_data}
-# User question/goal: {question}
+#     def generate_batch(batch_num, already_titles):
+#         prompt = f"""
+# Generate 10 unique RPG-style quests for the gamified life app 'Redo'.
 
-# Follow these game rules:
-# {GAME_RULES}
+# User stats:
+# {json.dumps(user_data.get("stats", {}), indent=2)}
 
-# Return exactly ONE quest in this JSON format:
+# Rules:
+# - Stats: Vitality, Intelligence, Fortitude, Charisma, Creativity, Luck.
+# - Difficulty → XP: Easy=20, Medium=50, Hard=100, Legendary=200.
+# - Ensure a balanced mix of stats and difficulties across quests.
+# - Each quest has: title, description, stats (1–3), difficulty, xpGain.
+# - No duplicate titles (avoid: {list(already_titles)}).
+# - Keep descriptions under 20 words.
+# - Output JSON ONLY in this format:
 # {{
-#   "title": "string",
-#   "description": "string",
-#   "stats": ["Stat1", "Stat2", "Stat3"],
-#   "xpGain": integer,
-#   "difficulty": "Easy" | "Medium" | "Hard" | "Legendary"
-# }}
-# """
-#     inner_json, _ = call_ollama(prompt, num_predict=300)
-#     try:
-#         quest = json.loads(inner_json)
-#     except json.JSONDecodeError:
-#         quest = {"error": "Malformed JSON", "raw": inner_json}
-#     return jsonify({"quest": quest})
-
-
-# def mentor_action():
-#     data = request.get_json()
-#     stats = data.get("stats", {})
-#     goals = data.get("goals", [])
-#     recent_quests = data.get("recent_quests", {})
-#     today = "August 10, 2025"
-
-#     base_prompt = f"""
-# You are an AI mentor in the RPG self-improvement game 'Redo'.
-# Today is {today}.
-# User stats: {stats}
-# User goals (priority order): {goals}
-# Recent quest activity: {recent_quests}
-
-# Follow these game rules:
-# {GAME_RULES}
-
-# Return today's game output **as raw JSON only**, no markdown, no extra text:
-# {{
-#   "quests_today": [
+#   "quests": [
 #     {{
 #       "title": "string",
 #       "description": "string",
 #       "stats": ["Stat1", "Stat2"],
-#       "xpGain": integer,
-#       "difficulty": "Easy" | "Medium" | "Hard" | "Legendary"
+#       "difficulty": "Easy" | "Medium" | "Hard" | "Legendary",
+#       "xpGain": integer
 #     }}
-#   ],
-#   "xp_updates": {{"StatName": xp_change_int}},
-#   "statuses_applied": ["Status1", "Status2"],
-#   "level_ups": {{"StatName": {{"old": int, "new": int}}}},
-#   "mentor_message": "string"
+#   ]
 # }}
 # """
-#     inner_json, done_reason = call_ollama(base_prompt)
-#     try:
-#         parsed = json.loads(inner_json)
-#     except json.JSONDecodeError:
-#         parsed = {}
+#         inner_json, _ = call_ollama(prompt, num_predict=800)
+#         try:
+#             parsed = json.loads(inner_json)
+#             quests = parsed.get("quests", [])
+#             if not isinstance(quests, list):
+#                 return []
+#             return quests
+#         except json.JSONDecodeError:
+#             print(f"[Batch {batch_num}] Malformed JSON:\n{inner_json}")
+#             return []
 
-#     if done_reason == "length":
-#         missing_fields = [k for k in ["quests_today", "xp_updates", "statuses_applied", "level_ups", "mentor_message"] if k not in parsed]
-#         if missing_fields:
-#             retry_prompt = f"""
-# The previous JSON output was truncated.  
-# Only return the missing fields: {missing_fields} in the same JSON format.
-# Do not repeat fields that are already complete.
-# """
-#             retry_inner_json, _ = call_ollama(retry_prompt, num_predict=300)
-#             try:
-#                 retry_parsed = json.loads(retry_inner_json)
-#                 parsed = merge_json(parsed, retry_parsed)
-#             except json.JSONDecodeError:
-#                 pass
+#     all_quests = []
+#     titles_set = set()
 
-#     return jsonify({"mentor_action": parsed})
+#     with ThreadPoolExecutor(max_workers=5) as executor:
+#         futures = [executor.submit(generate_batch, i, titles_set) for i in range(5)]
+#         for future in as_completed(futures):
+#             quests = future.result()
+#             for q in quests:
+#                 # Validate required keys
+#                 if not isinstance(q, dict):
+#                     continue
+#                 if "title" not in q or "description" not in q:
+#                     continue
+#                 if q["title"] in titles_set:
+#                     continue
+#                 titles_set.add(q["title"])
+#                 all_quests.append(q)
 
-if __name__ == "__main__":
-    app.run(debug=True)
+#     # Keep only 50 quests max
+#     all_quests = all_quests[:50]
+
+#     return jsonify({"quests": all_quests})
