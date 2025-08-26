@@ -36,8 +36,6 @@ export const Character = () => {
               <span className="text-sm text-beige/70 font- font-poppins">({biodata.gender}, {biodata.age} yrs)</span>
             </div>
             <div className="flex flex-wrap gap-4 text-beige/80 text-sm font-poppins">
-              <span>Height: {biodata.height} cm</span>
-              <span>Weight: {biodata.weight} kg</span>
               <span>Location: {biodata.location}</span>
               <span>Languages: {biodata.languages.join(', ')}</span>
             </div>
@@ -74,11 +72,14 @@ export const Character = () => {
           <div className="flex flex-col md:flex-row gap-4 mb-4">
             <div className="flex-1">
               <h2 className="font-semibold text-beige mb-1 text-sm font-montserrat">Relationship</h2>
-              <div className="text-xs text-beige/90 font-poppins">
-                <div>Status: {biodata.relationships.status}</div>
-                <div>Partner Location: {biodata.relationships.partnerLocation}</div>
-                <div>Notes: {biodata.relationships.notes}</div>
-              </div>
+              {biodata.relationships !== null ? 
+                <div className="text-xs text-beige/90 font-poppins">
+                  <div>Status: {biodata.relationships.status}</div>
+                  <div>Partner Location: {biodata.relationships.partnerLocation}</div>
+                  <div>Notes: {biodata.relationships.notes}</div>
+                </div>
+                : null
+              }
             </div>
             <div className="flex-1">
               <h2 className="font-semibold text-beige mb-1 text-sm font-montserrat">Finance</h2>

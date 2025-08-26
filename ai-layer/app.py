@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask #type: ignore
 from controllers.quests_controller import quests_bp
 from controllers.mentor_controller import mentor_bp
 from controllers.users_controller import users_bp
@@ -13,4 +13,4 @@ app.register_blueprint(goals_bp)
 app.register_blueprint(quests_crud_bp)
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="127.0.0.1", port=5001, debug=True)

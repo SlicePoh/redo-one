@@ -3,27 +3,25 @@
   "age": 24,
   "gender": "Male",
   "height": 167,
-  "weight": 82,
+  "weight": 75,
   "goals": [
-    "Lose belly fat and thigh weight",
+    "Lose fat",
     "Switch job and double salary",
     "Improve guitar skills",
     "Fix discipline"
   ],
   "addictions": [
     "Lazy",
-    "Junk food/Zomato ordering"
+    "Junk food ordering"
   ],
   "relationships": {
-    "status": "In a relationship",
-    "partnerLocation": "Bardhaman",
-    "notes": "Girlfriend is a designer at a startup"
+ 
   },
   "finance": {
-    "netWorthINR": 295000,
-    "monthlyIncome": 45000
+    "netWorthINR": 200000,
+    "monthlyIncome": 30000
   },
   "languages": ["English", "Hindi", "Bengali"],
   "location": "Bangalore",
-  "skills": ["Frontend Dev", "Angular", "React", "Content Writing", "DSA"]
+  "skills": ["Frontend Dev", "Angular", "React", "Content Writing", "Java"]
 }
