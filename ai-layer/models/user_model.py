@@ -1,8 +1,7 @@
 import uuid
 
 class UserDB:
-    users = {}  # mock DB
-
+    users = {}
     @classmethod
     def create_user(cls, name, email, password):
         user_id = str(uuid.uuid4())

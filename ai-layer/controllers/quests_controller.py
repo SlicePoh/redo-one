@@ -1,9 +1,9 @@
 from flask import Blueprint, request, jsonify
 from helpers.ollama_client import call_ollama
 from helpers.game_rules import GAME_RULES, XP_BY_DIFFICULTY
-from utils.json_utils import merge_json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 import json, uuid
+from utils.rag_utils import retrieve_context
 
 quests_bp = Blueprint("quests", __name__)
 
@@ -26,30 +26,19 @@ def generate_quests():
     user_data = data.get("user_data", {})
     goals = user_data.get("goals", [])
     target_quests = data.get("quests_count", 20)
-
     titles_set = set()
     all_quests = []
-
     def generate_for_goal(goal, already_titles):
+        query_text = goal.get("goal", "") + " " + " ".join(goal.get("questions", {}).values())
+        retrieved = retrieve_context(query_text, top_k=3)
         prompt = f"""
         You are an RPG quest designer for the gamified life app 'Redo'.
         User stats: {json.dumps(user_data.get("stats", {}), indent=2)}
         Goal: {goal.get("goal", "")}
-        Related question answers: {json.dumps(goal.get("questions", {}), indent=2)}
+        Related answers: {json.dumps(goal.get("questions", {}), indent=2)}
+        Retrieved knowledge: {retrieved}
         Rules: {GAME_RULES}
-        Format STRICT JSON: 
-        {{
-          "quests": [
-            {{
-              "title": "...",
-              "description": "... (max 20 words)",
-              "stats": ["..."],
-              "difficulty": "Easy|Medium|Hard|Legendary|Bonus",
-              "xpGain": 20,
-              "time_estimate": "30 min"
-            }}
-          ]
-        }}
+        Format STRICT JSON...
         """
         inner_json, _ = call_ollama(prompt, num_predict=800)
         try:
@@ -71,5 +60,4 @@ def generate_quests():
                         all_quests.append(normalize_quest(q))
                         if len(all_quests) >= target_quests:
                             break
-
     return jsonify({"quests": all_quests[:target_quests]})

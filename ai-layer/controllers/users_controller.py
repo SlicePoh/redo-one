@@ -8,7 +8,7 @@ def register():
     data = request.get_json()
     name = data.get("name")
     email = data.get("email")
-    password = data.get("password")  # ⚠️ store hashed in real app
+    password = data.get("password")  # store hashed in real app
     if not all([name, email, password]):
         return jsonify({"error": "Missing required fields"}), 400
     
