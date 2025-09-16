@@ -1,5 +1,5 @@
-from flask import Blueprint, request, jsonify
-from helpers.ollama_client import call_ollama
+from flask import Blueprint, request, jsonify # type: ignore
+from helpers.gemini_client import call_gemini
 from helpers.game_rules import GAME_RULES, STATUS_EFFECTS
 from utils.json_utils import merge_json
 import json, uuid
@@ -35,14 +35,14 @@ def mentor_action():
     recent_quests = data.get("recent_quests", {})
     today = datetime.now(timezone.utc).strftime("%B %d, %Y")
 
-    base_prompt = f"""
+    prompt = f"""
     You are an AI mentor for the RPG self-improvement game 'Redo'.
     Today is {today}.
     User stats: {stats}
     User goals: {goals}
     Recent quest activity: {recent_quests}
     Rules: {GAME_RULES}
-    Respond with JSON:
+    Respond STRICTLY in JSON:
     {{
       "dashboard": {{
         "current_streak": 0,
@@ -62,25 +62,12 @@ def mentor_action():
       "mentor_message": "short motivational text"
     }}
     """
-    inner_json, done_reason = call_ollama(base_prompt, num_predict=400)
 
+    inner_json = call_gemini(prompt, max_output_tokens=600)
     try:
         parsed = json.loads(inner_json)
     except json.JSONDecodeError:
         parsed = {}
-
-    # Retry if truncated
-    if done_reason == "length":
-        required_keys = ["dashboard", "active_status_effects", "quests_today", "character_stats", "recent_activity", "mentor_message"]
-        missing_keys = [k for k in required_keys if k not in parsed]
-        if missing_keys:
-            retry_prompt = f"Previous output truncated. Return missing fields only: {missing_keys} (raw JSON)."
-            retry_inner_json, _ = call_ollama(retry_prompt, num_predict=200)
-            try:
-                retry_parsed = json.loads(retry_inner_json)
-                parsed = merge_json(parsed, retry_parsed)
-            except json.JSONDecodeError:
-                pass
 
     # Normalize schema for frontend
     parsed["active_status_effects"] = [
@@ -89,5 +76,4 @@ def mentor_action():
     parsed["recent_activity"] = [
         normalize_activity(a) for a in parsed.get("recent_activity", [])
     ]
-
     return jsonify({"mentor_action": parsed})

@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify # type: ignore
 from models.user_model import UserDB
 
 quests_crud_bp = Blueprint("quests_crud", __name__)
